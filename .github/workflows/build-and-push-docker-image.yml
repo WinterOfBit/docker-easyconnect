@@ -3,8 +3,8 @@ name: Build And Push Docker Image
 on: workflow_dispatch
 
 env:
-  EC_IMAGE_NAME: hagb/docker-easyconnect
-  ATRUST_IMAGE_NAME: hagb/docker-atrust
+  EC_IMAGE_NAME: wulaguy/docker-easyconnect
+  ATRUST_IMAGE_NAME: wulaguy/docker-atrust
   ARCHS: mips64le arm64 i386 amd64
   ATRUST_ARCHS: mips64le arm64 amd64
 
@@ -46,13 +46,13 @@ jobs:
 
           build() {
             for ver in 7.6.3 7.6.7; do
-              docker-build --platform "$1" -t hagb/docker-easyconnect:build $(cat build-args/$ver-"$1".txt) -f Dockerfile.build .
+              docker-build --platform "$1" -t wulaguy/docker-easyconnect:build $(cat build-args/$ver-"$1".txt) -f Dockerfile.build .
               docker-build --platform "$1" -t ${{ env.EC_IMAGE_NAME }}:$(to-tag $prefix $ver $1) $(cat build-args/$ver-"$1".txt) -f Dockerfile .
               docker-build --platform "$1" -t ${{ env.EC_IMAGE_NAME }}:$(to-tag $prefix vncless $ver $1) $(cat build-args/$ver-"$1".txt) -f Dockerfile.vncless .
             done
 
             if [ -e build-args/atrust-"$1".txt ]; then
-              docker-build --platform "$1" -t hagb/docker-easyconnect:build $(cat build-args/atrust-"$1".txt) -f Dockerfile.build .
+              docker-build --platform "$1" -t wulaguy/docker-easyconnect:build $(cat build-args/atrust-"$1".txt) -f Dockerfile.build .
               docker-build --platform "$1" -t ${{ env.ATRUST_IMAGE_NAME }}:$(to-tag $prefix $1) $(cat build-args/atrust-"$1".txt) -f Dockerfile .
               docker-build --platform "$1" -t ${{ env.ATRUST_IMAGE_NAME }}:$(to-tag $prefix vncless $1) $(cat build-args/atrust-"$1".txt) -f Dockerfile.vncless .
             fi
@@ -68,7 +68,7 @@ jobs:
             build $arch
           done
 
-          docker image rm hagb/docker-easyconnect:build
+          docker image rm wulaguy/docker-easyconnect:build
 
       - name: Push Docker image
         run: |
