@@ -172,8 +172,8 @@ start_tigervncserver() {
 }
 
 keep_pinging() {
-	[ -n "$PING_ADDR" ] && while sleep $PING_INTERVAL; do
-		busybox ping -c1 -W1 -w1 "$PING_ADDR" >/dev/null 2>/dev/null
+	[ -n "$TIMER_CMD" ] && while sleep $TIMER_INTERVAL; do
+		busybox $TIMER_CMD
 	done &
 }
 
